@@ -4,10 +4,10 @@
 // Vertical Tracking Wheel
 pros::Rotation rotation_sensor(-11);
 
-pros::Imu imu(13);
+pros::Imu imu(1); // CHANGE THIS!!!
 
-pros::MotorGroup left_motors({-20, -17, 18}, pros::MotorGearset::blue);
-pros::MotorGroup right_motors({19, 16, -15}, pros::MotorGearset::blue);
+pros::MotorGroup left_motors({20, -19, -15}, pros::MotorGearset::blue);
+pros::MotorGroup right_motors({-18, 17, 16}, pros::MotorGearset::blue);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left_motors, // left motor group

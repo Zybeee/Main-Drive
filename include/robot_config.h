@@ -3,8 +3,8 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 
 // Motor ports
-constexpr int INTAKE_PORT = 21;
-constexpr int OUTTAKE_PORT = 12;
+constexpr int INTAKE_PORT = 13;
+constexpr int OUTTAKE_PORT = -12;
 
 // Declare all hardware (using extern so they're defined once in .cpp)
 extern pros::Rotation rotation_sensor;

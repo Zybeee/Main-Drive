@@ -20,7 +20,7 @@
 //   - lemlib::Chassis object declared globally (named `chassis`)
 // ============================================================================
 
-#include "lemlib/api.hpp"
+#include "lemlib/api.hpp" // IWYU pragma: keep
 #include "pros/distance.hpp"
 #include "pros/rtos.hpp"
 #include <cmath>
