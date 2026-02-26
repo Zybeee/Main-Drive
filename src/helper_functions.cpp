@@ -309,9 +309,8 @@ void park() {
     // Keep moving until red is detected
     while (true) {
         double hue = optical_sensor.get_hue();
-        int proximity = optical_sensor.get_proximity();
         
-        // Check for red hue and make sure something is actually in front
+        // Check for red hue
         if ((hue > 350 || hue < 15)) {
             break;
         }
