@@ -4,7 +4,14 @@
 // Vertical Tracking Wheel
 pros::Rotation rotation_sensor(-11);
 
-pros::Imu imu(1); // CHANGE THIS!!!
+pros::Imu imu(1);
+
+pros::Optical optical_sensor(6);
+
+pros::Distance back_sensor_left(3);
+pros::Distance back_sensor_right(4);
+pros::Distance left_sensor(2);
+pros::Distance right_sensor(5);
 
 pros::MotorGroup left_motors({20, -19, -15}, pros::MotorGearset::blue);
 pros::MotorGroup right_motors({-18, 17, 16}, pros::MotorGearset::blue);

@@ -75,7 +75,7 @@ void OuttakeControl::update(IntakeControl& intake) {
 
         // Set motor velocities based on current mode
         if (comboMode) {
-            velocity = -600;             // Outtake reverse
+            velocity = 600;             // Outtake reverse
             Intake.move_velocity(-600);  // Intake reverse
         }
         // If combo not active, velocity stays 0 (intake handled by IntakeControl)
@@ -86,7 +86,7 @@ void OuttakeControl::update(IntakeControl& intake) {
 
 int OuttakeControl::getVelocity() {
     if (midScoringMode) return -600;
-    if (comboMode) return -600;
+    if (comboMode) return 600;
     return 0;
 }
 

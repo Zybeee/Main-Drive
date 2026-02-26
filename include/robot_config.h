@@ -4,7 +4,7 @@
 
 // Motor ports
 constexpr int INTAKE_PORT = 13;
-constexpr int OUTTAKE_PORT = -12;
+constexpr int OUTTAKE_PORT = 12;
 
 // Declare all hardware (using extern so they're defined once in .cpp)
 extern pros::Rotation rotation_sensor;
