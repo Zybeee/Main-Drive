@@ -266,7 +266,7 @@ const double jam_threshold = 20; // tune this
 
 void score() {
     intake.move(-127);
-    outtake.move(127);
+    outtake.move(-127);
 
     pros::delay(500);
 
@@ -279,12 +279,12 @@ void score() {
         if (avg_velocity <= jam_threshold) {
             // Reverse to unjam
             intake.move(127);
-            outtake.move(-127);
+            outtake.move(127);
             pros::delay(100);
 
             // Forward again
             intake.move(-127);
-            outtake.move(127);
+            outtake.move(-127);
             pros::delay(300); // let it spin back up before checking again
         }
 
