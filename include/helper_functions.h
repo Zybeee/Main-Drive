@@ -93,3 +93,7 @@ void resetPositionRight(pros::Distance& sensor, double sensor_offset,
 // ============================================================================
 void driveUntilDistance(pros::Distance& sensor, double threshold_in,
                         int speed = 60, bool forwards = true, int timeout_ms = 3000);
+
+void park();
+void score();
+void shakeBot(int durationMs);

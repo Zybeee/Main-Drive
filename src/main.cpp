@@ -1,5 +1,6 @@
 #include "main.h"
 #include "autonomous.h"
+#include "helper_functions.h"
 #include "curves.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "pros/rtos.hpp"
@@ -17,7 +18,22 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-  skills_auton();
+ chassis.setPose(-48,-48,90);
+ resetPositionAndHeadingBack(back_sensor_left, back_sensor_right,
+                             9.0625,
+                             5.5, 5.5,
+                             72.0);
+
+
+resetPositionRight(right_sensor, 5.375, 72.0);
+lemlib::Pose pose = chassis.getPose();
+    
+  master.print(0, 0, "X: %.2f Y: %.2f", pose.x, pose.y);
+  pros::delay(50); // delay between lines to avoid controller spam
+  master.print(1, 0, "Theta: %.2f", pose.theta);
+
+  //park();
+  //skills_auton();
   // leftAuton();
   // rightAuton();
   // leftAuton_descore();

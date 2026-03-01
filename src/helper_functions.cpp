@@ -1,19 +1,5 @@
-// ============================================================================
-// DISTANCE SENSOR POSITION RESET FUNCTIONS (LemLib port of updated RW functions)
-//
 
-//
-// GLOBAL OFFSET CONSTANTS (measure carefully in inches):
-//   const double back_sensor_left_offset  = ?; // tracking center to left back sensor face
-//   const double back_sensor_right_offset = ?; // tracking center to right back sensor face
-//   const double back_sensor_spacing      = ?; // horizontal distance between two back sensor faces
-//   const double left_sensor_offset       = ?; // tracking center to left sensor face
-//   const double right_sensor_offset      = ?; // tracking center to right sensor face
-//   const double field_half_size          = 72.0; // standard VEX field
-//
-// REQUIREMENTS:
-//   - PROS + LemLib
-//   - lemlib::Chassis object declared globally (named `chassis`)
+
 // ============================================================================
 
 #include "lemlib/api.hpp" // IWYU pragma: keep
@@ -26,8 +12,14 @@
 
 
 
-extern lemlib::Chassis chassis;
-extern pros::Optical optical_sensor;
+
+
+const double back_sensor_left_offset  = 5.5;
+const double back_sensor_right_offset = 5.5;
+const double back_sensor_spacing      = 9.0625;
+const double left_sensor_offset       = 5.375;
+const double right_sensor_offset      = 5.375;
+const double field_half_size          = 72.0;
 
 // ============================================================================
 // resetPositionAndHeadingBack
@@ -47,7 +39,7 @@ extern pros::Optical optical_sensor;
 void resetPositionAndHeadingBack(pros::Distance& back_left, pros::Distance& back_right,
                                   double sensor_spacing,
                                   double left_offset,   double right_offset,
-                                  double field_half = 72.0) {
+                                  double field_half) {
 
     double d_left  = back_left.get()  / 25.4; // mm to inches
     double d_right = back_right.get() / 25.4;
@@ -133,7 +125,7 @@ void resetPositionAndHeadingBack(pros::Distance& back_left, pros::Distance& back
 // IMPORTANT: Call this when the left side of the robot is facing a wall.
 // ============================================================================
 void resetPositionLeft(pros::Distance& sensor, double sensor_offset,
-                       double field_half = 72.0) {
+                       double field_half) {
 
     double sensorReading = sensor.get() / 25.4;
 
@@ -182,7 +174,7 @@ void resetPositionLeft(pros::Distance& sensor, double sensor_offset,
 // IMPORTANT: Call this when the right side of the robot is facing a wall.
 // ============================================================================
 void resetPositionRight(pros::Distance& sensor, double sensor_offset,
-                        double field_half = 72.0) {
+                        double field_half) {
 
     double sensorReading = sensor.get() / 25.4;
 
@@ -236,7 +228,7 @@ void resetPositionRight(pros::Distance& sensor, double sensor_offset,
 //   resetPositionAndHeadingBack(...);
 // ============================================================================
 void driveUntilDistance(pros::Distance& sensor, double threshold_in,
-                        int speed = 60, bool forwards = true, int timeout_ms = 3000) {
+                        int speed, bool forwards, int timeout_ms) {
 
     int direction = forwards ? 1 : -1;
     int elapsed   = 0;
@@ -261,50 +253,53 @@ void driveUntilDistance(pros::Distance& sensor, double threshold_in,
     chassis.tank(0, 0, true);
 }
 
-const double normal_motor_velocity = 200; // tune this
-const double jam_threshold = 20; // tune this
+const double normal_motor_velocity = 575; 
+const double jam_threshold = 20; 
 
 void score() {
-    intake.move(-127);
-    outtake.move(-127);
+    Intake.move(-127);
+    Outtake.move(127);
 
     pros::delay(500);
 
     while (true) {
-        double intake_velocity = std::abs(intake.get_actual_velocity());
-        double outtake_velocity = std::abs(outtake.get_actual_velocity());
-        double avg_velocity = (intake_velocity + outtake_velocity) / 2.0;
+        double velocity = std::abs(Intake.get_actual_velocity());
+       
 
         // Unjam if velocity is hella low
-        if (avg_velocity <= jam_threshold) {
+        if (velocity <= jam_threshold) {
             // Reverse to unjam
-            intake.move(127);
-            outtake.move(127);
+            Intake.move(127);
+            Outtake.move(-127);
             pros::delay(100);
 
             // Forward again
-            intake.move(-127);
-            outtake.move(-127);
-            pros::delay(300); // let it spin back up before checking again
+            Intake.move(-127);
+            Outtake.move(127);
+            pros::delay(500); // let it spin back up before checking again
         }
 
         // All balls scored once velocity returns to normal
-        if (avg_velocity >= normal_motor_velocity) {
+        if (velocity >= normal_motor_velocity) {
+            pros::delay(500);
             break;
         }
 
         pros::delay(20);
     }
 
-    intake.move(0);
-    outtake.move(0);
+    Intake.move(0);
+    Outtake.move(0);
 }
+
+
 
 void park() {
     optical_sensor.set_led_pwm(100);
-    
+    Intake.move(-127);
+    Outtake.move(127);
     // Move forward at full speed
-    chassis.arcade(127, 0);
+    chassis.arcade(113, 0);
     
     // Keep moving until red is detected
     while (true) {
@@ -317,8 +312,37 @@ void park() {
         pros::delay(10);
     }
     
-    pros::delay(100);
+    pros::delay(150);
     
     // Stop the bot
     chassis.arcade(0, 0);
+}
+
+/**
+ * Shakes the bot left and right (~5 degrees each direction) for the given
+ * duration in milliseconds. Useful for unsticking balls during unloading.
+ *
+ * Usage: shakeBot(2000);  // shake for 2 seconds while unloading
+ */
+void shakeBot(int durationMs) {
+  const int SHAKE_POWER = 35;     // motor power for each shake (tune if needed)
+  const int SHAKE_INTERVAL = 100; // ms per half-cycle (left or right)
+
+  uint32_t startTime = pros::millis();
+
+  while ((pros::millis() - startTime) < (uint32_t)durationMs) {
+    // Turn left: left motors backward, right motors forward
+    left_motors.move(-SHAKE_POWER);
+    right_motors.move(SHAKE_POWER);
+    pros::delay(SHAKE_INTERVAL);
+
+    // Turn right: left motors forward, right motors backward
+    left_motors.move(SHAKE_POWER);
+    right_motors.move(-SHAKE_POWER);
+    pros::delay(SHAKE_INTERVAL);
+  }
+
+  // Stop and settle
+  left_motors.brake();
+  right_motors.brake();
 }

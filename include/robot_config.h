@@ -1,6 +1,7 @@
 #pragma once
 #include "main.h" // IWYU pragma: keep
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "pros/distance.hpp"
 
 // Motor ports
 constexpr int INTAKE_PORT = 13;
@@ -25,6 +26,14 @@ extern pros::adi::DigitalOut Unloader;
 extern pros::adi::DigitalOut MidScoring;
 
 extern pros::Controller master;
+
+extern pros::Optical optical_sensor;
+
+extern pros::Distance back_sensor_left;
+extern pros::Distance back_sensor_right;
+extern pros::Distance left_sensor;
+extern pros::Distance right_sensor;
+
 
 // Initialization function
 void initializeRobot();

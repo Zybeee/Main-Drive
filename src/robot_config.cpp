@@ -13,6 +13,13 @@ pros::Distance back_sensor_right(4);
 pros::Distance left_sensor(2);
 pros::Distance right_sensor(5);
 
+const double back_sensor_left_offset  = 5.5;
+const double back_sensor_right_offset = 5.5;
+const double back_sensor_spacing      = 9.0625;
+const double left_sensor_offset       = 5.375;
+const double right_sensor_offset      = 5.375;
+const double field_half_size          = 72.0;
+
 pros::MotorGroup left_motors({20, -19, -15}, pros::MotorGearset::blue);
 pros::MotorGroup right_motors({-18, 17, 16}, pros::MotorGearset::blue);
 
@@ -38,9 +45,9 @@ lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel
 );
 
 // lateral PID controller
-lemlib::ControllerSettings lateral_controller(4.25,   // kP
+lemlib::ControllerSettings lateral_controller(5.5,   // kP
                                               0,   // kI
-                                              1,   // kD
+                                              14,   // kD
                                               3,   // anti windup
                                               1,   // small error range
                                               100, // small error range timeout
@@ -51,9 +58,9 @@ lemlib::ControllerSettings lateral_controller(4.25,   // kP
 
 
 // angular PID controller - TUNED
-lemlib::ControllerSettings angular_controller(.863   , // kP
+lemlib::ControllerSettings angular_controller(.95,//kP
                                               0,   // kI
-                                              0.235,  // kD
+                                              1.1, //kD
                                               3,   // anti windup - ENABLE
                                               1,   // small error range, in degrees - ENABLE
                                               100, // small error range timeout - ENABLE
