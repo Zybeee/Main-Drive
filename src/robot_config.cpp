@@ -8,7 +8,7 @@ pros::Imu imu(1);
 
 pros::Optical optical_sensor(6);
 
-pros::Distance back_sensor_left(3);
+pros::Distance back_sensor_left(3);\
 pros::Distance back_sensor_right(4);
 pros::Distance left_sensor(2);
 pros::Distance right_sensor(5);
@@ -71,7 +71,7 @@ lemlib::ControllerSettings angular_controller(.95,//kP
 
 // Add these BEFORE the chassis declaration
 lemlib::ExpoDriveCurve throttle_curve(3, 10, 1.05);
-lemlib::ExpoDriveCurve steer_curve(3, 10, 1.05);
+lemlib::ExpoDriveCurve steer_curve(3, 10, 1.15);
 
 // create the chassis
 lemlib::Chassis chassis(drivetrain,
