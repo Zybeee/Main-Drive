@@ -71,7 +71,7 @@ lemlib::ControllerSettings angular_controller(.95,//kP
 
 // Add these BEFORE the chassis declaration
 lemlib::ExpoDriveCurve throttle_curve(3, 10, 1.05);
-lemlib::ExpoDriveCurve steer_curve(3, 10, 1.15);
+lemlib::ExpoDriveCurve steer_curve(3, 10, 1.05);
 
 // create the chassis
 lemlib::Chassis chassis(drivetrain,
